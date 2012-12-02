@@ -149,5 +149,5 @@ chrome.extension.onMessage.addListener((message, sender, sendResponse) =>
   console.log "receiving"
   console.log message
   if message.rnd != @myRND && message.action == 'start' # only act on other's messages
-    highlightParagraph(@paragraphs[message.el], message.rnd)
+    highlightParagraph($(@paragraphs[message.el]), message.rnd)
 )

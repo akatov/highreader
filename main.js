@@ -193,7 +193,7 @@
     console.log("receiving");
     console.log(message);
     if (message.rnd !== this.myRND && message.action === 'start') {
-      return highlightParagraph(this.paragraphs[message.el], message.rnd);
+      return highlightParagraph($(this.paragraphs[message.el]), message.rnd);
     }
   });
 
