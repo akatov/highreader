@@ -6,7 +6,7 @@
 
   this.highlightClass = 'dmitri_highlight';
 
-  this.minTimeout = 500;
+  this.lineTimeout = 600;
 
   chrome.extension.sendRequest({
     action: 'getState'
@@ -98,7 +98,7 @@
   };
 
   this.highlightParagraphWords = function($el, cl, num) {
-    var $e, agg, lastLeft, timeout;
+    var $e, agg, lastLeft, linebreak, timeout;
     $el.find("." + highlightClass).removeClass("" + highlightClass);
     if (num < 0) {
       $el.find("." + cl).removeClass(cl);
@@ -106,21 +106,31 @@
     }
     agg = 0;
     lastLeft = -10;
+    linebreak = false;
     while (agg < minCharsPerHighlight) {
       $e = $el.find("." + cl + (num++));
-      if ($e.length > 0 && $e.position().left > lastLeft) {
+      if ($e.length > 0) {
+        if (!$e.is(':visible')) {
+          continue;
+        }
+        if ($e.position().left < lastLeft) {
+          linebreak = true;
+          break;
+        }
         $e.addClass(highlightClass);
         agg += $e.text().length;
         lastLeft = $e.position().left;
-      } else if ($e.length > 0) {
-        num--;
-        break;
       } else {
         num = -1;
         break;
       }
     }
-    timeout = Math.max(this.minTimeout, agg * 1000 * 60 / charsPerMinute);
+    if (linebreak) {
+      num--;
+      timeout = lineTimeout;
+    } else {
+      timeout = agg * 1000 * 60 / charsPerMinute;
+    }
     return setTimeout(function() {
       return highlightParagraphWords($el, cl, num);
     }, timeout);

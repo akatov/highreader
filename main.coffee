@@ -3,7 +3,7 @@
 @highlightClass = 'dmitri_highlight'
 # @charsPerMinute = 1500
 # @minCharsPerHighlight = 15
-@minTimeout = 500
+@lineTimeout = 600
 
 chrome.extension.sendRequest(action: 'getState', (response) =>
   @state = response.state || on
@@ -73,20 +73,26 @@ $(->
     return
   agg = 0
   lastLeft = -10 # to keep track of line breaks
+  linebreak = false
   while agg < minCharsPerHighlight
     $e = $el.find(".#{ cl }#{ num++ }")
-    if $e.length > 0 && $e.position().left > lastLeft
+    if $e.length > 0
+      continue unless $e.is(':visible')
+      if $e.position().left < lastLeft # linebreak
+        linebreak = true
+        break
       $e.addClass(highlightClass)
       agg += $e.text().length
       lastLeft = $e.position().left
-    else if $e.length > 0 # linebreak
-      num-- # so we display this again
-      break
     else
       # agg = minCharsPerHighlight # to finish while loop
       num = -1 # to finish callbacks
       break
-  timeout = Math.max(@minTimeout, agg * 1000 * 60 / charsPerMinute)
+  if linebreak
+    num-- # so we display this again on next call
+    timeout = lineTimeout
+  else
+    timeout = agg * 1000 * 60 / charsPerMinute
   setTimeout(
     -> highlightParagraphWords($el, cl, num)
     timeout
