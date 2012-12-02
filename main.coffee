@@ -65,8 +65,6 @@ $(->
 # $el - paragraph
 # cl  - selector class
 # num - where we are currently looking
-# agg - how many characters we have aggregated
-#   (so we can set bigger timeout if necessary)
 #
 @highlightParagraphWords = ($el, cl, num) ->
   $el.find(".#{ highlightClass }").removeClass("#{ highlightClass }") # unset
