@@ -26,17 +26,15 @@
     textNodes($el)
       .replaceWith( -> textWithClass(@textContent, cl))
 
-@paragraph = $('#mw-content-text').find('p:first')
-
-preAnnotateParagraph(paragraph, 'dmitri')
-
 @annotateParagraph = ($el, cl) ->
+  preAnnotateParagraph($el, cl)
   num = 0
   $el.find(".#{ cl }").each( ->
     $(@).addClass("#{ cl }#{ num++ }")
   )
   $el.find(".#{ cl }").removeClass(cl)
 
+@paragraph = $('#mw-content-text').find('p:first')
 annotateParagraph(paragraph, 'dmitri')
 
 @highlightParagraph = ($el, cl, num) ->
