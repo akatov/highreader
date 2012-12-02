@@ -129,7 +129,7 @@
     }
   };
 
-  this.paragraphs = $('#mw-content-text').find('p');
+  this.paragraphs = $('#mw-content-text').children();
 
   this.paragraphs.click(function() {
     return highlightParagraph($(this));

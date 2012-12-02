@@ -95,6 +95,6 @@ $(->
     annotateParagraph($el, annotationClass)
     highlightParagraphWords($el, annotationClass, 0)
 
-@paragraphs = $('#mw-content-text').find('p')
+@paragraphs = $('#mw-content-text').children()
 
 @paragraphs.click( -> highlightParagraph($(@)))
