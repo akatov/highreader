@@ -33,7 +33,7 @@
       return sendResponse({});
     } else if (request.action === 'getWPH') {
       return sendResponse({
-        wpm: window.wph
+        wph: window.wph
       });
     } else if (request.action === 'setWPH') {
       window.wph = request.wph;

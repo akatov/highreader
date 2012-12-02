@@ -21,7 +21,7 @@ chrome.extension.onRequest.addListener((request, sender, sendResponse) ->
     window.wpm = request.wpm
     sendResponse({})
   else if request.action == 'getWPH'
-    sendResponse({wpm: window.wph})
+    sendResponse({wph: window.wph})
   else if request.action == 'setWPH'
     window.wph = request.wph
     sendResponse({})

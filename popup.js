@@ -8,11 +8,41 @@
     }, function(response) {
       return $('#state').prop('checked', response.state || false);
     });
-    return $('#state').click(function() {
+    chrome.extension.sendRequest({
+      action: 'getWPM'
+    }, function(response) {
+      return $('#wpm').val(response.wpm);
+    });
+    chrome.extension.sendRequest({
+      action: 'getWPH'
+    }, function(response) {
+      return $('#wph').val(response.wph);
+    });
+    $('#state').click(function() {
       console.log('clicked');
       return chrome.extension.sendRequest({
         action: 'setState',
         state: $('#state').is(':checked')
+      }, function(response) {
+        return console.log(response);
+      });
+    });
+    return $('#ok').click(function() {
+      var wph, wpm;
+      wpm = parseInt($('#wpm').val());
+      wph = parseInt($('#wph').val());
+      if (isNaN(wpm) || isNaN(wph) || wpm === 0 || wph === 0) {
+        return;
+      }
+      chrome.extension.sendRequest({
+        action: 'setWPM',
+        wpm: wpm
+      }, function(response) {
+        return console.log(response);
+      });
+      return chrome.extension.sendRequest({
+        action: 'setWPH',
+        wph: wph
       }, function(response) {
         return console.log(response);
       });
