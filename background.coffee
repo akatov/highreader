@@ -1,28 +1,31 @@
-console.log "this is state"
-console.log chrome.extension.getViews()
-console.log chrome.extension.getBackgroundPage()
+@state = on
+@wpm = 300
+@wph = 3
 
-window.state = on
-window.wpm = 300
-window.wph = 3
+@messageCurrentTab = (message) ->
+  chrome.tabs.query({currentWindow: true, active: true }, (tabArray) ->
+    console.log tabArray
+    chrome.tabs.sendMessage(tabArray[0].id, message, ->)
+  )
 
-chrome.extension.onRequest.addListener((request, sender, sendResponse) ->
+chrome.extension.onRequest.addListener((request, sender, sendResponse) =>
   console.log request
-  console.log sender
-  console.log sendResponse
   if request.action == 'getState'
-    sendResponse({state: window.state})
+    sendResponse({state: @state})
   else if request.action == 'setState'
-    window.state = request.state
+    @state = request.state
+    @messageCurrentTab({action: 'setState', state: window.state})
     sendResponse({})
   else if request.action == 'getWPM'
-    sendResponse({wpm: window.wpm})
+    sendResponse({wpm: @wpm})
   else if request.action == 'setWPM'
-    window.wpm = request.wpm
+    @wpm = request.wpm
+    @messageCurrentTab({action: 'setWPM', wpm: window.wpm})
     sendResponse({})
   else if request.action == 'getWPH'
-    sendResponse({wph: window.wph})
+    sendResponse({wph: @wph})
   else if request.action == 'setWPH'
-    window.wph = request.wph
+    @wph = request.wph
+    @messageCurrentTab({action: 'setWPH', wph: window.wph})
     sendResponse({})
 )

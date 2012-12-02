@@ -15,6 +15,16 @@ chrome.extension.sendRequest(action: 'getWPH', (response) =>
   @minCharsPerHighlight = response.wph * 5 || 15
 )
 
+chrome.extension.onMessage.addListener((message, sender, sendResponse) =>
+  console.log message
+  if message.action == 'setState'
+    @state = message.state
+  else if message.action == 'setWPM'
+    @charsPerMinute = message.wpm * 5
+  else if message.action == 'setWPH'
+    @minCharsPerHighlight = message.wph * 5
+)
+
 $(->
   headHTML = document.getElementsByTagName('head')[0].innerHTML
   headHTML += "<style>.#{ highlightClass } { background-color: #FF9900; }</style>"

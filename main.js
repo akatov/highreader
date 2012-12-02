@@ -26,6 +26,17 @@
     return _this.minCharsPerHighlight = response.wph * 5 || 15;
   });
 
+  chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
+    console.log(message);
+    if (message.action === 'setState') {
+      return _this.state = message.state;
+    } else if (message.action === 'setWPM') {
+      return _this.charsPerMinute = message.wpm * 5;
+    } else if (message.action === 'setWPH') {
+      return _this.minCharsPerHighlight = message.wph * 5;
+    }
+  });
+
   $(function() {
     var headHTML;
     headHTML = document.getElementsByTagName('head')[0].innerHTML;
