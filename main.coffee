@@ -3,6 +3,10 @@
 @charsPerMinute = 1500
 @minCharsPerHighlight = 15
 
+headHTML = document.getElementsByTagName('head')[0].innerHTML
+headHTML += "<style>.#{ highlightClass } { background-color: red; }</style>"
+document.getElementsByTagName('head')[0].innerHTML = headHTML
+
 @wordWithClass = (word, cl='') ->
   "<span class='#{ cl }'>#{ word }</span>"
 
@@ -34,9 +38,14 @@
 @annotateParagraph = ($el, cl) ->
   preAnnotateParagraph($el, cl)
   num = 0
-  $el.find(".#{ cl }:visible").each( ->
+  $el.find(".#{ cl }").each( ->
     $(@).addClass("#{ cl }#{ num++ }")
   )
+
+@deannotateParagraph = ($el, cl) ->
+  len = $el.find(".#{ cl }").length
+  for num in [0...len]
+    $el.find(".#{ cl }#{ num }").removeClass("#{ cl }#{ num }")
   $el.find(".#{ cl }").removeClass(cl)
 
 # $el - paragraph
@@ -47,7 +56,9 @@
 #
 @highlightParagraphWords = ($el, cl, num) ->
   $el.find(".#{ highlightClass }").removeClass("#{ highlightClass }") # unset
-  return unless num >= 0 # this finishes the callbacks
+  if num < 0 # this finishes the callbacks
+    $el.find(".#{ cl }").removeClass(cl)
+    return
   agg = 0
   while agg < minCharsPerHighlight
     $e = $el.find(".#{ cl }#{ num++ }")
@@ -63,9 +74,14 @@
   )
 
 @highlightParagraph = ($el) ->
-  annotateParagraph($el, annotationClass)
-  highlightParagraphWords(paragraph, annotationClass, 0)
+  # try to stop first
+  $e = $el.find(".#{ highlightClass }")
+  if $e.length > 0 # if already highlighting
+    deannotateParagraph($el, annotationClass)
+  else # start highlighting
+    annotateParagraph($el, annotationClass)
+    highlightParagraphWords($el, annotationClass, 0)
 
-@paragraph = $('#mw-content-text').find('p:first')
+@paragraphs = $('#mw-content-text').find('p')
 
-highlightParagraph(paragraph)
+@paragraphs.click( -> highlightParagraph($(@)))
