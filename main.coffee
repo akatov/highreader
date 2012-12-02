@@ -1,7 +1,18 @@
+# @state = on
 @annotationClass = 'dmitri'
 @highlightClass = 'dmitri_highlight'
-@charsPerMinute = 1500
-@minCharsPerHighlight = 15
+# @charsPerMinute = 1500
+# @minCharsPerHighlight = 15
+
+chrome.extension.sendRequest(action: 'getState', (response) =>
+  @state = response.state || on
+)
+chrome.extension.sendRequest(action: 'getWPM', (response) =>
+  @charsPerMinute = response.wpm * 5 || 1500
+)
+chrome.extension.sendRequest(action: 'getWPH', (response) =>
+  @minCharsPerHighlight = response.wph * 5 || 15
+)
 
 $(->
   headHTML = document.getElementsByTagName('head')[0].innerHTML
@@ -78,7 +89,7 @@ $(->
 @highlightParagraph = ($el) ->
   # try to stop first
   $e = $el.find(".#{ highlightClass }")
-  if $e.length > 0 # if already highlighting
+  if !@state || $e.length > 0 # if already highlighting
     deannotateParagraph($el, annotationClass)
   else # start highlighting
     annotateParagraph($el, annotationClass)
