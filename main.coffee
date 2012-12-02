@@ -32,12 +32,12 @@ $(->
 )
 
 @wordWithClass = (word, cl='') ->
-  "<span class='#{ cl }'>#{ word }</span>"
+  "<span class='#{ cl }'>#{ word } </span>"
 
 @textWithClass = (text, cl='') ->
   # console.log text
   # console.log text.split(' ')
-  ret = (wordWithClass(word, cl) for word in text.split(' ')).join(' ')
+  ret = (wordWithClass(word, cl) for word in text.split(' ')).join('')
   # console.log ret
   ret
 

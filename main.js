@@ -48,7 +48,7 @@
     if (cl == null) {
       cl = '';
     }
-    return "<span class='" + cl + "'>" + word + "</span>";
+    return "<span class='" + cl + "'>" + word + " </span>";
   };
 
   this.textWithClass = function(text, cl) {
@@ -65,7 +65,7 @@
         _results.push(wordWithClass(word, cl));
       }
       return _results;
-    })()).join(' ');
+    })()).join('');
     return ret;
   };
 
