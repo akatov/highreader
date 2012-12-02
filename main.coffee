@@ -18,14 +18,14 @@
     .contents()
     .filter( -> @nodeType != 3)
 
-@annotate = ($el) ->
+@annotate = ($el, cl) ->
   if $el.length != 0
     # need to do this first or otherwise we get infinite recursion by creating
     # new non text children nodes
-    annotate(nonTextNodes($el)) 
+    annotate(nonTextNodes($el), cl)
     textNodes($el)
-      .replaceWith( -> textWithClass(@textContent, 'dmitri'))
+      .replaceWith( -> textWithClass(@textContent, cl))
 
 @paragraph = $('#mw-content-text').find('p:first')
 
-@annotate(paragraph)
+@annotate(paragraph, 'dmitri')
