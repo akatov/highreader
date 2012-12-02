@@ -1,3 +1,4 @@
+@myRND = Math.floor(Math.random() * 100)
 @highlightClass = 'dmitri_highlight'
 $(->
   headHTML = document.getElementsByTagName('head')[0].innerHTML
@@ -13,8 +14,11 @@ $(->
 # document.head.appendChild(x)
 
 # y = document.createElement("script")
-# y.innerHTML = 'document.Firebase = new Firebase("http://akatov.firebaseio.com")';
+# y.innerHTML = 'document.Firebase = new Firebase("https://akatov.firebaseio.com")';
 # document.head.appendChild(y)
+
+@myDataRef = new Firebase('https://akatov.firebaseio.com/')
+console.log @myDataRef
 
 # @state = on
 @annotationClass = 'dmitri'
@@ -118,29 +122,32 @@ chrome.extension.onMessage.addListener((message, sender, sendResponse) =>
     timeout
   )
 
-@highlightParagraph = ($el) ->
-#  @myDataRef.push({el: $el})
-  # try to stop first
-  $e = $el.find(".#{ highlightClass }")
-  if $e.length > 0 # if already highlighting
-    deannotateParagraph($el, annotationClass)
-  else # start highlighting
-    annotateParagraph($el, annotationClass)
-    highlightParagraphWords($el, annotationClass, 0)
-
 @paragraphs = $('#mw-content-text').children()
 
-@paragraphs.click( -> highlightParagraph($(@)))
+@highlightParagraph = ($el, rnd) ->
+  index = @paragraphs.index($el)
+  # try to stop first
+  $e = $el.find(".#{ highlightClass }")
+  msg = {}
+  if $e.length > 0 # if already highlighting
+    msg = {rnd: @myRND, action: 'stop', el: index}
+    deannotateParagraph($el, annotationClass)
+  else # start highlighting
+    msg = {rnd: @myRND, action: 'start', el: index}
+    annotateParagraph($el, annotationClass)
+    highlightParagraphWords($el, annotationClass, 0)
+  console.log "rnd #{ rnd } myRND #{ @myRND }"
+  if rnd == @myRND
+    console.log "sending"
+    console.log msg
+    @myDataRef.push(msg)
 
-$( ->
-  console.log Firebase
-  # @myDataRef = new Firebase('https://akatov.firebaseio.com/')
+@paragraphs.click( -> highlightParagraph($(@), myRND))
+
+@myDataRef.on('child_added', (snapshot) ->
+  message = snapshot.val()
+  console.log "receiving"
+  console.log message
+  if message.rnd != @myRND && message.action == 'start' # only act on other's messages
+    highlightParagraph(@paragraphs[message.el], message.rnd)
 )
-# @myDataRef = null
-
-# $(->
-#   @myDataRef.on('child_added', (snapshot) ->
-#     message = snapshot.val()
-#     console.log message
-#   )
-# )

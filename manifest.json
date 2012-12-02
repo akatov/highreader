@@ -19,7 +19,8 @@
         {
             "matches": [
                 "http://*.wikipedia.org/*",
-                "http://*/*"
+                "http://*/*",
+                "http://*.firebaseio.com/*"
             ],
             "js": [
                 "jquery.min.js",

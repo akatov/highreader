@@ -2,6 +2,8 @@
 (function() {
   var _this = this;
 
+  this.myRND = Math.floor(Math.random() * 100);
+
   this.highlightClass = 'dmitri_highlight';
 
   $(function() {
@@ -10,6 +12,10 @@
     headHTML += "<style>." + highlightClass + " { background-color: #FF9900; }</style>";
     return document.getElementsByTagName('head')[0].innerHTML = headHTML;
   });
+
+  this.myDataRef = new Firebase('https://akatov.firebaseio.com/');
+
+  console.log(this.myDataRef);
 
   this.annotationClass = 'dmitri';
 
@@ -146,26 +152,49 @@
     }, timeout);
   };
 
-  this.highlightParagraph = function($el) {
-    var $e;
+  this.paragraphs = $('#mw-content-text').children();
+
+  this.highlightParagraph = function($el, rnd) {
+    var $e, index, msg;
+    index = this.paragraphs.index($el);
     $e = $el.find("." + highlightClass);
+    msg = {};
     if ($e.length > 0) {
-      return deannotateParagraph($el, annotationClass);
+      msg = {
+        rnd: this.myRND,
+        action: 'stop',
+        el: index
+      };
+      deannotateParagraph($el, annotationClass);
     } else {
+      msg = {
+        rnd: this.myRND,
+        action: 'start',
+        el: index
+      };
       annotateParagraph($el, annotationClass);
-      return highlightParagraphWords($el, annotationClass, 0);
+      highlightParagraphWords($el, annotationClass, 0);
+    }
+    console.log("rnd " + rnd + " myRND " + this.myRND);
+    if (rnd === this.myRND) {
+      console.log("sending");
+      console.log(msg);
+      return this.myDataRef.push(msg);
     }
   };
 
-  this.paragraphs = $('#mw-content-text').children();
-
   this.paragraphs.click(function() {
-    return highlightParagraph($(this));
+    return highlightParagraph($(this), myRND);
   });
 
-  $(function() {
-    console.log(Firebase);
-    return this.myDataRef = new Firebase('https://akatov.firebaseio.com/');
+  this.myDataRef.on('child_added', function(snapshot) {
+    var message;
+    message = snapshot.val();
+    console.log("receiving");
+    console.log(message);
+    if (message.rnd !== this.myRND && message.action === 'start') {
+      return highlightParagraph(this.paragraphs[message.el], message.rnd);
+    }
   });
 
 }).call(this);
