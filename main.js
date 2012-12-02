@@ -111,8 +111,8 @@
   this.highlightParagraphWords = function($el, cl, num) {
     var $e, agg, lastLeft, linebreak, timeout;
     $el.find("." + highlightClass).removeClass("" + highlightClass);
-    if (num < 0) {
-      $el.find("." + cl).removeClass(cl);
+    if (!_this.state || num < 0) {
+      deannotateParagraph($el, cl);
       return;
     }
     agg = 0;
@@ -149,7 +149,7 @@
   this.highlightParagraph = function($el) {
     var $e;
     $e = $el.find("." + highlightClass);
-    if (!this.state || $e.length > 0) {
+    if ($e.length > 0) {
       return deannotateParagraph($el, annotationClass);
     } else {
       annotateParagraph($el, annotationClass);

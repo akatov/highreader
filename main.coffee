@@ -76,10 +76,10 @@ $(->
 # cl  - selector class
 # num - where we are currently looking
 #
-@highlightParagraphWords = ($el, cl, num) ->
+@highlightParagraphWords = ($el, cl, num) =>
   $el.find(".#{ highlightClass }").removeClass("#{ highlightClass }") # unset
-  if num < 0 # this finishes the callbacks
-    $el.find(".#{ cl }").removeClass(cl)
+  if !@state || num < 0 # this finishes the callbacks
+    deannotateParagraph($el, cl)
     return
   agg = 0
   lastLeft = -10 # to keep track of line breaks
@@ -110,7 +110,7 @@ $(->
 @highlightParagraph = ($el) ->
   # try to stop first
   $e = $el.find(".#{ highlightClass }")
-  if !@state || $e.length > 0 # if already highlighting
+  if $e.length > 0 # if already highlighting
     deannotateParagraph($el, annotationClass)
   else # start highlighting
     annotateParagraph($el, annotationClass)
