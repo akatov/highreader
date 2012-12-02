@@ -1,4 +1,5 @@
 @annotationClass = 'dmitri'
+@highlightClass = 'dmitri_highlight'
 
 @wordWithClass = (word, cl='') ->
   "<span class='#{ cl }'>#{ word }</span>"
@@ -39,11 +40,11 @@
 @highlightParagraphWord = ($el, cl, num) ->
   $e = $el.find(".#{ cl }#{ num }")
   if $e.length > 0 # when starting
-    $e.css('background-color', 'white') # unset
+    $e.removeClass(highlightClass)
   num++
   $e = $el.find(".#{ cl }#{ num }")
   if $e.length > 0
-    $e.css('background-color', 'red')
+    $e.addClass(highlightClass)
     setTimeout(
       -> highlightParagraphWord($el, cl, num)
       1000
