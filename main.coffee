@@ -18,25 +18,26 @@
     .contents()
     .filter( -> @nodeType != 3)
 
-@annotate = ($el, cl) ->
+@preAnnotateParagraph = ($el, cl) ->
   if $el.length != 0
     # need to do this first or otherwise we get infinite recursion by creating
     # new non text children nodes
-    annotate(nonTextNodes($el), cl)
+    preAnnotateParagraph(nonTextNodes($el), cl)
     textNodes($el)
       .replaceWith( -> textWithClass(@textContent, cl))
 
 @paragraph = $('#mw-content-text').find('p:first')
 
-annotate(paragraph, 'dmitri')
+preAnnotateParagraph(paragraph, 'dmitri')
 
-@enumerate = ($el, cl1, cl2) ->
+@annotateParagraph = ($el, cl) ->
   num = 0
-  $el.find(".#{ cl1 }").each( ->
-    $(@).addClass("#{ cl2 }#{ num++ }")
+  $el.find(".#{ cl }").each( ->
+    $(@).addClass("#{ cl }#{ num++ }")
   )
+  $el.find(".#{ cl }").removeClass(cl)
 
-enumerate(paragraph, 'dmitri', 'number')
+annotateParagraph(paragraph, 'dmitri')
 
 @highlightParagraph = ($el, cl, num) ->
   $e = $el.find(".#{ cl }#{ num }")
@@ -51,4 +52,4 @@ enumerate(paragraph, 'dmitri', 'number')
       1000
     )
 
-highlightParagraph(paragraph, 'number', -1)
+highlightParagraph(paragraph, 'dmitri', -1)
