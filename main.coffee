@@ -1,3 +1,5 @@
+@annotationClass = 'dmitri'
+
 @wordWithClass = (word, cl='') ->
   "<span class='#{ cl }'>#{ word }</span>"
 
@@ -48,8 +50,8 @@
     )
 
 @highlightParagraph = ($el) ->
-  annotateParagraph($el, 'dmitri')
-  highlightParagraphWord(paragraph, 'dmitri', -1)
+  annotateParagraph($el, annotationClass)
+  highlightParagraphWord(paragraph, annotationClass, -1)
 
 @paragraph = $('#mw-content-text').find('p:first')
 
