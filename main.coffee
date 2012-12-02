@@ -37,3 +37,18 @@
   )
 
 @enumerate(paragraph, 'dmitri', 'number')
+
+@highlightParagraph = ($el, cl, num) ->
+  $e = $el.find(".#{ cl }#{ num }")
+  if $e.length > 0 # when starting
+    $e.css('background-color', 'white') # unset
+  num++
+  $e = $el.find(".#{ cl }#{ num }")
+  if $e.length > 0
+    $e.css('background-color', 'red')
+    setTimeout(
+      -> highlightParagraph($el, cl, num)
+      1000
+    )
+
+highlightParagraph(paragraph, 'number', -1)
