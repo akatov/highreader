@@ -29,7 +29,7 @@
 @annotateParagraph = ($el, cl) ->
   preAnnotateParagraph($el, cl)
   num = 0
-  $el.find(".#{ cl }").each( ->
+  $el.find(".#{ cl }:visible").each( ->
     $(@).addClass("#{ cl }#{ num++ }")
   )
   $el.find(".#{ cl }").removeClass(cl)
