@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+    "name": "Highreader",
+    "version": "0.1",
+    "description": "Highlighting Speed Reading helper for Wikipedia.",
+    "icons": {
+        "16" : "icon.png",
+        "48" : "icon.png",
+        "128" : "icon.png"
+    },
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_popup": "apatosaurus.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [ "http://*.wikipedia.org/*" ],
+            "js": [
+                "jquery.min.js",
+                "main.js"
+            ]
+        }
+    ],
+    "permissions": [
+        "http://*.wikipedia.org/*"
+    ]
+}
