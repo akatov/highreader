@@ -98,11 +98,10 @@ $(->
       # agg = minCharsPerHighlight # to finish while loop
       num = -1 # to finish callbacks
       break
+  timeout = agg * 1000 * 60 / charsPerMinute
   if linebreak
     num-- # so we display this again on next call
-    timeout = lineTimeout
-  else
-    timeout = agg * 1000 * 60 / charsPerMinute
+    timeout = Math.max(timeout, lineTimeout)
   setTimeout(
     -> highlightParagraphWords($el, cl, num)
     timeout

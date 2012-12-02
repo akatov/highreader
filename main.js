@@ -136,11 +136,10 @@
         break;
       }
     }
+    timeout = agg * 1000 * 60 / charsPerMinute;
     if (linebreak) {
       num--;
-      timeout = lineTimeout;
-    } else {
-      timeout = agg * 1000 * 60 / charsPerMinute;
+      timeout = Math.max(timeout, lineTimeout);
     }
     return setTimeout(function() {
       return highlightParagraphWords($el, cl, num);
