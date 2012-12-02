@@ -29,3 +29,11 @@
 @paragraph = $('#mw-content-text').find('p:first')
 
 @annotate(paragraph, 'dmitri')
+
+@enumerate = ($el, cl1, cl2) ->
+  num = 0
+  $el.find(".#{ cl1 }").each( ->
+    $(@).addClass("#{ cl2 }#{ num++ }")
+  )
+
+@enumerate(paragraph, 'dmitri', 'number')
