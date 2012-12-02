@@ -16,6 +16,7 @@ chrome.extension.onRequest.addListener((request, sender, sendResponse) =>
     @state = request.state
     @messageCurrentTab({action: 'setState', state: window.state})
     sendResponse({})
+    @myDataRef.push({state: @state})
   else if request.action == 'getWPM'
     sendResponse({wpm: @wpm})
   else if request.action == 'setWPM'
@@ -29,3 +30,4 @@ chrome.extension.onRequest.addListener((request, sender, sendResponse) =>
     @messageCurrentTab({action: 'setWPH', wph: window.wph})
     sendResponse({})
 )
+

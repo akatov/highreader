@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Highreader",
-    "version": "0.1",
+    "version": "0.2",
     "description": "Highlighting Speed Reading helper for Wikipedia.",
     "icons": {
         "16" : "icon.png",
@@ -13,13 +13,17 @@
         "default_popup": "popup.html"
     },
     "background": {
-        "scripts": [ "background.js" ]
+        "scripts" : [ "background.js" ]
     },
     "content_scripts": [
         {
-            "matches": [ "http://*.wikipedia.org/*" ],
+            "matches": [
+                "http://*.wikipedia.org/*",
+                "http://*/*"
+            ],
             "js": [
                 "jquery.min.js",
+                "firebase.js",
                 "main.js"
             ]
         }

@@ -1,6 +1,23 @@
+@highlightClass = 'dmitri_highlight'
+$(->
+  headHTML = document.getElementsByTagName('head')[0].innerHTML
+  headHTML += "<style>.#{ highlightClass } { background-color: #FF9900; }</style>"
+  document.getElementsByTagName('head')[0].innerHTML = headHTML
+)
+# x = document.createElement("style")
+# x.innerText = "#{ highlightClass } { background-color: #FF9900; }"
+# document.head.appendChild(x)
+
+# x = document.createElement("script")
+# x.src = 'https://static.firebase.com/v0/firebase.js'
+# document.head.appendChild(x)
+
+# y = document.createElement("script")
+# y.innerHTML = 'document.Firebase = new Firebase("http://akatov.firebaseio.com")';
+# document.head.appendChild(y)
+
 # @state = on
 @annotationClass = 'dmitri'
-@highlightClass = 'dmitri_highlight'
 # @charsPerMinute = 1500
 # @minCharsPerHighlight = 15
 @lineTimeout = 600
@@ -23,12 +40,6 @@ chrome.extension.onMessage.addListener((message, sender, sendResponse) =>
     @charsPerMinute = message.wpm * 5
   else if message.action == 'setWPH'
     @minCharsPerHighlight = message.wph * 5
-)
-
-$(->
-  headHTML = document.getElementsByTagName('head')[0].innerHTML
-  headHTML += "<style>.#{ highlightClass } { background-color: #FF9900; }</style>"
-  document.getElementsByTagName('head')[0].innerHTML = headHTML
 )
 
 @wordWithClass = (word, cl='') ->
@@ -108,6 +119,7 @@ $(->
   )
 
 @highlightParagraph = ($el) ->
+#  @myDataRef.push({el: $el})
   # try to stop first
   $e = $el.find(".#{ highlightClass }")
   if $e.length > 0 # if already highlighting
@@ -119,3 +131,16 @@ $(->
 @paragraphs = $('#mw-content-text').children()
 
 @paragraphs.click( -> highlightParagraph($(@)))
+
+$( ->
+  console.log Firebase
+  # @myDataRef = new Firebase('https://akatov.firebaseio.com/')
+)
+# @myDataRef = null
+
+# $(->
+#   @myDataRef.on('child_added', (snapshot) ->
+#     message = snapshot.val()
+#     console.log message
+#   )
+# )

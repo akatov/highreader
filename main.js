@@ -2,9 +2,16 @@
 (function() {
   var _this = this;
 
-  this.annotationClass = 'dmitri';
-
   this.highlightClass = 'dmitri_highlight';
+
+  $(function() {
+    var headHTML;
+    headHTML = document.getElementsByTagName('head')[0].innerHTML;
+    headHTML += "<style>." + highlightClass + " { background-color: #FF9900; }</style>";
+    return document.getElementsByTagName('head')[0].innerHTML = headHTML;
+  });
+
+  this.annotationClass = 'dmitri';
 
   this.lineTimeout = 600;
 
@@ -35,13 +42,6 @@
     } else if (message.action === 'setWPH') {
       return _this.minCharsPerHighlight = message.wph * 5;
     }
-  });
-
-  $(function() {
-    var headHTML;
-    headHTML = document.getElementsByTagName('head')[0].innerHTML;
-    headHTML += "<style>." + highlightClass + " { background-color: #FF9900; }</style>";
-    return document.getElementsByTagName('head')[0].innerHTML = headHTML;
   });
 
   this.wordWithClass = function(word, cl) {
@@ -161,6 +161,11 @@
 
   this.paragraphs.click(function() {
     return highlightParagraph($(this));
+  });
+
+  $(function() {
+    console.log(Firebase);
+    return this.myDataRef = new Firebase('https://akatov.firebaseio.com/');
   });
 
 }).call(this);

@@ -30,7 +30,10 @@
         action: 'setState',
         state: window.state
       });
-      return sendResponse({});
+      sendResponse({});
+      return _this.myDataRef.push({
+        state: _this.state
+      });
     } else if (request.action === 'getWPM') {
       return sendResponse({
         wpm: _this.wpm
