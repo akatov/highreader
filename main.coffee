@@ -28,7 +28,7 @@
 
 @paragraph = $('#mw-content-text').find('p:first')
 
-@annotate(paragraph, 'dmitri')
+annotate(paragraph, 'dmitri')
 
 @enumerate = ($el, cl1, cl2) ->
   num = 0
@@ -36,7 +36,7 @@
     $(@).addClass("#{ cl2 }#{ num++ }")
   )
 
-@enumerate(paragraph, 'dmitri', 'number')
+enumerate(paragraph, 'dmitri', 'number')
 
 @highlightParagraph = ($el, cl, num) ->
   $e = $el.find(".#{ cl }#{ num }")
