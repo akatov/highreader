@@ -1,5 +1,7 @@
 @annotationClass = 'dmitri'
 @highlightClass = 'dmitri_highlight'
+@charsPerMinute = 1500
+@minCharsPerHighlight = 15
 
 @wordWithClass = (word, cl='') ->
   "<span class='#{ cl }'>#{ word }</span>"
@@ -37,22 +39,32 @@
   )
   $el.find(".#{ cl }").removeClass(cl)
 
-@highlightParagraphWord = ($el, cl, num) ->
-  $e = $el.find(".#{ cl }#{ num }")
-  if $e.length > 0 # when starting
-    $e.removeClass(highlightClass)
-  num++
-  $e = $el.find(".#{ cl }#{ num }")
-  if $e.length > 0
-    $e.addClass(highlightClass)
-    setTimeout(
-      -> highlightParagraphWord($el, cl, num)
-      1000
-    )
+# $el - paragraph
+# cl  - selector class
+# num - where we are currently looking
+# agg - how many characters we have aggregated
+#   (so we can set bigger timeout if necessary)
+#
+@highlightParagraphWords = ($el, cl, num) ->
+  $el.find(".#{ highlightClass }").removeClass("#{ highlightClass }") # unset
+  return unless num >= 0 # this finishes the callbacks
+  agg = 0
+  while agg < minCharsPerHighlight
+    $e = $el.find(".#{ cl }#{ num++ }")
+    if $e.length > 0
+      $e.addClass(highlightClass)
+      agg += $e.text().length
+    else
+      agg = minCharsPerHighlight # to finish while loop
+      num = -1 # to finish callbacks
+  setTimeout(
+    -> highlightParagraphWords($el, cl, num)
+    agg * 1000 * 60 / charsPerMinute
+  )
 
 @highlightParagraph = ($el) ->
   annotateParagraph($el, annotationClass)
-  highlightParagraphWord(paragraph, annotationClass, -1)
+  highlightParagraphWords(paragraph, annotationClass, 0)
 
 @paragraph = $('#mw-content-text').find('p:first')
 
