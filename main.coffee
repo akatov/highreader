@@ -34,10 +34,7 @@
   )
   $el.find(".#{ cl }").removeClass(cl)
 
-@paragraph = $('#mw-content-text').find('p:first')
-annotateParagraph(paragraph, 'dmitri')
-
-@highlightParagraph = ($el, cl, num) ->
+@highlightParagraphWord = ($el, cl, num) ->
   $e = $el.find(".#{ cl }#{ num }")
   if $e.length > 0 # when starting
     $e.css('background-color', 'white') # unset
@@ -46,8 +43,14 @@ annotateParagraph(paragraph, 'dmitri')
   if $e.length > 0
     $e.css('background-color', 'red')
     setTimeout(
-      -> highlightParagraph($el, cl, num)
+      -> highlightParagraphWord($el, cl, num)
       1000
     )
 
-highlightParagraph(paragraph, 'dmitri', -1)
+@highlightParagraph = ($el) ->
+  annotateParagraph($el, 'dmitri')
+  highlightParagraphWord(paragraph, 'dmitri', -1)
+
+@paragraph = $('#mw-content-text').find('p:first')
+
+highlightParagraph(paragraph)
