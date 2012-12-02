@@ -4,7 +4,7 @@
 @minCharsPerHighlight = 15
 
 headHTML = document.getElementsByTagName('head')[0].innerHTML
-headHTML += "<style>.#{ highlightClass } { background-color: red; }</style>"
+headHTML += "<style>.#{ highlightClass } { background-color: #FF9900; }</style>"
 document.getElementsByTagName('head')[0].innerHTML = headHTML
 
 @wordWithClass = (word, cl='') ->
