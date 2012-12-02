@@ -6,6 +6,8 @@
 
   this.highlightClass = 'dmitri_highlight';
 
+  this.minTimeout = 500;
+
   chrome.extension.sendRequest({
     action: 'getState'
   }, function(response) {
@@ -96,26 +98,32 @@
   };
 
   this.highlightParagraphWords = function($el, cl, num) {
-    var $e, agg;
+    var $e, agg, lastLeft, timeout;
     $el.find("." + highlightClass).removeClass("" + highlightClass);
     if (num < 0) {
       $el.find("." + cl).removeClass(cl);
       return;
     }
     agg = 0;
+    lastLeft = -10;
     while (agg < minCharsPerHighlight) {
       $e = $el.find("." + cl + (num++));
-      if ($e.length > 0) {
+      if ($e.length > 0 && $e.position().left > lastLeft) {
         $e.addClass(highlightClass);
         agg += $e.text().length;
+        lastLeft = $e.position().left;
+      } else if ($e.length > 0) {
+        num--;
+        break;
       } else {
-        agg = minCharsPerHighlight;
         num = -1;
+        break;
       }
     }
+    timeout = Math.max(this.minTimeout, agg * 1000 * 60 / charsPerMinute);
     return setTimeout(function() {
       return highlightParagraphWords($el, cl, num);
-    }, agg * 1000 * 60 / charsPerMinute);
+    }, timeout);
   };
 
   this.highlightParagraph = function($el) {
