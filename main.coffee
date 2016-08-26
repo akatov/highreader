@@ -2,7 +2,7 @@
 @highlightClass = 'dmitri_highlight'
 $(->
   headHTML = document.getElementsByTagName('head')[0].innerHTML
-  headHTML += "<style>.#{ highlightClass } { background-color: #FF9900; }</style>"
+  headHTML += "<style>.#{ highlightClass } { background-color: #FFFF00; }</style>"
   document.getElementsByTagName('head')[0].innerHTML = headHTML
 )
 # x = document.createElement("style")

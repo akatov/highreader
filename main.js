@@ -9,7 +9,7 @@
   $(function() {
     var headHTML;
     headHTML = document.getElementsByTagName('head')[0].innerHTML;
-    headHTML += "<style>." + highlightClass + " { background-color: #FF9900; }</style>";
+    headHTML += "<style>." + highlightClass + " { background-color: #FFFF00; }</style>";
     return document.getElementsByTagName('head')[0].innerHTML = headHTML;
   });
 
